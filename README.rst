@@ -1024,7 +1024,7 @@ left to right).
     void pan_tilde_dsp(t_pan_tilde *x, t_signal **sp)
     {
       dsp_add(pan_tilde_perform, 5, x,
-              sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[0]->s_n);
+              sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, (t_int)sp[0]->s_n);
     }
 
 ``dsp_add`` adds a *perform*-routine (as declared in the first argument)
@@ -1043,6 +1043,10 @@ of this signal-vector ``().s_n``.
 Since all signal vectors of a patch (not including it’s sub-patches) are
 of the same length, it is sufficient to get the length of one of these
 vectors.
+
+**NOTE**: it is strongly recommended to explicitly cast integers to ``t_int``
+before passing them to the ``dsp_add`` to avoid undefined behavior on
+certain platforms!
 
 Since an object doesn't know its *perform*-routine's signal-vector
 length until the "dsp"-method, this would be the place to allocate
