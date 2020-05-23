@@ -952,20 +952,23 @@ is sent to each object. Each class that has a method for the
 as this will make it impossible to manually send an *illegal* ``dsp``
 message to the object, triggering a crash.
 
-Signal classes that want to provide signal-inlets have to declare this
+Signal classes that want to provide signal-inlets should declare this
 via the ``CLASS_MAINSIGNALIN``-macro. This enables signals at the first
-(default) inlet. If more than one signal-inlet is needed, they have to
+(main) inlet. If more than one signal-inlet is needed, they have to
 be created explicitly in the constructor-method.
 
-Inlets that are declared as signal-inlets cannot provide methods for
-``t_float``-messages any longer.
+The first argument of the ``CLASS_MAINSIGNALIN``-macro is a pointer to
+the signal class. The second argument is the type of the class’s data space.
 
-The first argument of the macro is a pointer to the signal class. The
-second argument is the type of the class’s data space.
+The last argument is a dummy-variable which serves as a default value
+if the main signal-inlet is not connected. All “float”-messages to the
+main inlet will be directed to this variable.
 
-The last argument is a dummy-variable out of the data space that is
-needed to replace non-existing signal at the signal-inlet(s) with
-``t_float``-messages.
+You can override the float-method *after* the ``CLASS_MAINSIGNALIN``-macro
+if you do not want automatic float-to-signal promotion for the main inlet,
+but this goes against Pd's paradigm and is not recommended.
+
+Additional signal-inlets will always perform float-to-signal promotion.
 
 construction of signal-inlets and -outlets
 ------------------------------------------
